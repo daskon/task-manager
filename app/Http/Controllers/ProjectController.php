@@ -5,15 +5,28 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
+use ProjectService;
+use TaskService;
 
 class ProjectController extends Controller
 {
+    protected $projectService;
+    protected $taskService;
+
+    public function __construct(ProjectService $projectService, TaskService $taskService)
+    {
+        $this->projectService = $projectService;
+        $this->taskService = $taskService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $projects = $this->projectService->getUserProjects(Auth::user()->id);
+        return view('projects.index', compact('projects'));
     }
 
     /**
@@ -21,7 +34,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
@@ -29,15 +42,22 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+        $this->projectService->createProject($data);
+        return redirect()
+            ->route('projects.index')
+            ->with('success','Project created successfully');
     }
 
     /**
-     * Display the specified resource.
+     * Display project with tasks
      */
     public function show(Project $project)
     {
-        //
+        $this->authorize('view', $project);
+        $tasks = $this->taskService->getProjectTasks($project->id);
+        return view('projects.show', compact('project','tasks'));
     }
 
     /**
@@ -45,7 +65,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        $this->authorize('update', $project);
+        return view('projects.edit', compact('project'));
     }
 
     /**
@@ -53,7 +74,14 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $this->authorize('update', $project);
+        $this->projectService->updateProject(
+                $project->id,
+                $request->validated()
+        );
+        return redirect()
+            ->route('projects.index')
+            ->with('success','Project updated successfully');
     }
 
     /**
@@ -61,6 +89,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $this->authorize('delete', $project);
+        $this->projectService->deleteProject($project->id);
+        return redirect()
+            ->route('projects.index')
+            ->with('success','Project deleted successfully');
     }
 }
