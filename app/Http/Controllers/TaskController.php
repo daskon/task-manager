@@ -6,9 +6,9 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Services\ProjectService;
+use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
-use ProjectService;
-use TaskService;
 
 class TaskController extends Controller
 {
@@ -43,7 +43,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request, Project $project)
     {
-        $this->authorize('update', $request);
+        $this->authorize('update', $project);
         $data = $request->validated();
         $data['project_id'] = $project->id;
 
@@ -73,9 +73,13 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, Project $project, Task $task)
     {
-        $this->authorize('update', $task->project);
+        if($task->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('update', $project);
 
         $this->taskService->updateTask(
             $task->id,
@@ -88,31 +92,35 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(Project $project, $taskId)
     {
-        $this->authorize('delete', $task->project);
+        $this->authorize('update', $project);
 
-        $projectId = $task->project_id;
+        $task = $this->taskService->findTask($taskId);
+        if (!$task || $task->project_id != $project->id) {
+            abort(404);
+        }
 
-        $this->taskService->deleteTask($task->id);
+        $this->taskService->deleteTask($taskId);
 
         return redirect()
-            ->route('projects.show', $projectId)
+            ->route('projects.show', $project->id)
             ->with('success', 'Task deleted');
     }
 
     /**
-     * mark task completed
+     * toggle task completion status
      *
      * @param  mixed $task
      * @return void
      */
-    public function markDone(Task $task)
+    public function toggleDone(Project $project, $taskId)
     {
-        $this->authorize('update', $task->project);
+        $this->authorize('update', $project);
 
-        $this->taskService->markDone($task->id);
+        $this->taskService->toggleDone($project->id, $taskId);
 
-        return back()->with('success', 'Task marked as done');
+        return back()->with('success', 'Task status updated');
     }
+
 }

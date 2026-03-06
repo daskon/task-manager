@@ -39,7 +39,7 @@ class EloquentTaskRepository implements TaskRepositoryInterface {
   public function update(int $taskId, array $data)
   {
     $task = Task::findOrFail($taskId);
-    $task->update($task);
+    $task->update($data);
     return $task;
   }
 
@@ -51,7 +51,9 @@ class EloquentTaskRepository implements TaskRepositoryInterface {
    */
   public function delete(int $taskId)
   {
-    return Task::destroy($taskId);
+    $task = Task::findOrFail($taskId);
+    $task->delete();
+    return $task;
   }
 
   /**

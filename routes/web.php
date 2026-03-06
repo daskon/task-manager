@@ -14,7 +14,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -33,14 +33,15 @@ Route::middleware('auth')->group(function () {
     )->name('tasks.update');
 
     Route::delete(
-            '/projects/{project}/tasks/{task}',
+            '/projects/{project}/tasks/{taskId}',
             [TaskController::class, 'destroy']
     )->name('tasks.destroy');
 
     Route::patch(
-            '/projects/{project}/tasks/{task}/done',
-            [TaskController::class, 'markDone']
-    )->name('tasks.done');
+            '/projects/{project}/tasks/{taskId}/toggle',
+            [TaskController::class, 'toggleDone']
+    )->name('tasks.toggle');
+
 });
 
 require __DIR__.'/auth.php';

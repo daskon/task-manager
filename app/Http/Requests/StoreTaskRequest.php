@@ -25,7 +25,8 @@ class StoreTaskRequest extends FormRequest
             'title' => [
                 'required',
                 'string',
-                'max:255',
+                'max:100',
+                'min:10',
                 'regex:/^[A-Za-z0-9 ]+$/',
             ],
             'due_date' => ['nullable','date']

@@ -1,4 +1,5 @@
 <?php
+namespace App\Services;
 
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Support\Facades\Cache;

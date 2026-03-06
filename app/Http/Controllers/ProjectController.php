@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Services\ProjectService;
+use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
-use ProjectService;
-use TaskService;
 
 class ProjectController extends Controller
 {

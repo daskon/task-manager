@@ -25,7 +25,8 @@ class UpdateProjectRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255',
+                'max:120',
+                'min:10',
                 'regex:/^[A-Za-z0-9 ]+$/',
             ]
         ];

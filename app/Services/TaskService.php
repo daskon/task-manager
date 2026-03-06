@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services;
+
 use App\Repositories\Interfaces\TaskRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 
@@ -51,7 +53,11 @@ class TaskService {
    */
   public function updateTask(int $taskId, array $data)
   {
-    return $this->taskRepo->update($taskId, $data);
+    $task = $this->taskRepo->update($taskId, $data);
+    $project = $task->project;
+    Cache::forget("user_projects_". $project->user_id);
+    Cache::forget("project_tasks_". $project->id);
+    return $task;
   }
 
   /**
@@ -80,15 +86,18 @@ class TaskService {
   }
 
   /**
-   * mark task as complete
+   * toggle task completion status
    *
    * @param  mixed $taskId
    * @return void
    */
-  public function markDone(int $taskId)
+  public function toggleDone(int $projectId, int $taskId)
   {
+    $task = $this->taskRepo->find($taskId);
+    Cache::forget("project_tasks_". $projectId);
     return $this->taskRepo->update($taskId,[
-      'is_done' => true
+      'is_done' => !$task->is_done
     ]);
   }
+
 }

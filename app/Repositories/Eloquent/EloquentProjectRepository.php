@@ -55,7 +55,7 @@ class EloquentProjectRepository implements ProjectRepositoryInterface {
   public function update(int $projectId, array $data)
   {
     $project = Project::findOrFail($projectId);
-    $project->update($project);
+    $project->update($data);
     return $project;
   }
 
@@ -67,6 +67,8 @@ class EloquentProjectRepository implements ProjectRepositoryInterface {
    */
   public function delete(int $projectId)
   {
-    return Project::destroy($projectId);
+    $project = Project::findOrFail($projectId);
+    $project->delete();
+    return $project;
   }
 }
