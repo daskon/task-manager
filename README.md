@@ -7,12 +7,11 @@ Simple Laravel application to manage **Projects and Tasks**.
 * User authentication (Laravel Breeze)
 * Create and manage projects
 * Create tasks under projects
-* Edit tasks
-* Delete tasks
+* Edit and Delete functionalities for task and projects
 * Mark tasks as completed
 * Flash success messages
-* Nested project → task routes
-* Basic feature tests
+* Nested project → task routes (ex: '/projects/{project}/tasks' )
+* Basic Unit tests using PhpUnit
 
 ## Validation Rules
 
