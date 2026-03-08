@@ -1,24 +1,34 @@
 # Project & Task Management App
 
-A simple Laravel application to manage **Projects and Tasks**.
-Built using **Laravel, Breeze authentication, Blade, and Tailwind CSS**.
+Simple Laravel application to manage **Projects and Tasks**.
 
 ## Features Completed
 
 * User authentication (Laravel Breeze)
-* Create projects
-* View project list
+* Create and manage projects
 * Create tasks under projects
 * Edit tasks
 * Delete tasks
 * Mark tasks as completed
-* Nested task routes under projects
 * Flash success messages
+* Nested project → task routes
 * Basic feature tests
 
-## Test User Logins
+## Validation Rules
 
-Use the following accounts to test the application:
+When creating **projects** or **tasks**, the following validation rules apply:
+
+* Minimum **10 characters**
+* Only **letters and numbers allowed**
+* **No special characters**
+
+Example validation rule used in the application:
+
+```php
+'name' => ['required', 'min:10', 'regex:/^[A-Za-z0-9 ]+$/']
+```
+
+## Test User Logins
 
 User A
 Email: [usera@example.com](mailto:usera@example.com)
@@ -30,21 +40,48 @@ Password: password
 
 ## Installation
 
-Clone the repository and install dependencies.
+Install dependencies:
 
 ```bash
 composer install
 npm install
 ```
 
-Copy environment file and generate key.
+Copy environment file and generate key:
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-Run migrations and seeders.
+## Database Setup
+
+Create database in MySQL:
+
+```sql
+CREATE DATABASE task_manager;
+```
+
+Create database user:
+
+```sql
+CREATE USER 'task_user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON task_manager.* TO 'task_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Update `.env` file:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=project_tasks
+DB_USERNAME=task_user
+DB_PASSWORD=password
+```
+
+Run migrations and seeders:
 
 ```bash
 php artisan migrate --seed
@@ -52,7 +89,7 @@ php artisan migrate --seed
 
 ## Run the Application
 
-Two terminals are required.
+Run in **two terminals**.
 
 Terminal 1:
 
@@ -66,7 +103,7 @@ Terminal 2:
 npm run dev
 ```
 
-Application will be available at:
+Open:
 
 ```
 http://127.0.0.1:8000
@@ -84,5 +121,5 @@ php artisan test
 * PHP
 * Blade
 * Tailwind CSS
-* MySQL / SQLite
+* MySQL
 * PHPUnit
