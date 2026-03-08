@@ -40,21 +40,21 @@
                   </td>
                   <td class="p-2">{{ $task->title }}</td>
                   <td class="p-2">{{ $task->due_date?->format('Y-m-d') ?? '-' }}</td>
-                  <td class="p-2 text-center">
+                  <td class="flex gap-2 p-2 text-center">
                     <button
-                      class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                      class="flex items-center gap-2 bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                       onclick="document.getElementById('edit-task-{{ $task->id }}').classList.remove('hidden')"
                     >
-                      Edit
+                      <x-icons.edit/> Edit
                     </button>
 
                     <form action="{{ route('tasks.destroy', [$project->id, $task->id]) }}" method="POST" class="inline-block">
                       @csrf
                       @method('DELETE')
                       <button
-                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                        class="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                         onclick="return confirm('Delete this task?')">
-                        Delete
+                        <x-icons.delete/> Delete
                       </button>
                     </form>
 

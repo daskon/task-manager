@@ -7,8 +7,8 @@
     </h2>
 
     <a href="{{ route('projects.create') }}"
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Create Project
+        class="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <x-icons.plus /> Create Project
     </a>
   </div>
 </x-slot>
@@ -36,14 +36,18 @@
                     </a>
                   </td>
                   <td class="p-2">{{ $project->tasks_count ?? 0 }}</td>
-                  <td class="p-2 text-center">
+                  <td class="flex items-center gap-2 p-2">
                     <a href="{{ route('projects.edit', $project->id) }}"
-                        class="bg-yellow-500 text-white px-3 py-[7px] rounded hover:bg-yellow-600">Edit</a>
+                        class="flex items-center gap-2 w-20 bg-yellow-500 text-white px-3 py-[7px] rounded hover:bg-yellow-600">
+                       <x-icons.edit/>  Edit
+                    </a>
                     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="inline-block"
                         onsubmit="return confirm('Are you sure you want to delete this project?');">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                      <button type="submit" class="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                        <x-icons.delete/> Delete
+                      </button>
                     </form>
                   </td>
                 </tr>

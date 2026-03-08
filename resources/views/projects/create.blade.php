@@ -1,11 +1,16 @@
 <x-app-layout>
 
-@section('content')
+<x-slot name="header">
+  <div class="flex justify-between items-center">
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ __('New Project') }}
+    </h2>
+  </div>
+</x-slot>
+
 <div class="container mx-auto p-4 max-w-lg">
   @include('helpers.flash')
   @include('helpers.errors')
-
-  <h1 class="text-xl font-bold mb-4">{{ isset($project) ? 'Edit' : 'Create' }}</h1>
 
   <form action="{{ isset($project) ? route('projects.update', $project->id) : route('projects.store') }}" method="POST">
     @csrf
