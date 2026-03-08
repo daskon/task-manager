@@ -38,41 +38,55 @@ User B
 Email: [userb@example.com](mailto:userb@example.com)
 Password: password
 
+---
+
 ## Installation
 
-Install dependencies:
+### 1. Clone the project to your desktop
+
+```bash
+git clone <repository-url>
+cd task-manager
+```
+
+### 2. Install PHP dependencies
 
 ```bash
 composer install
+```
+
+### 3. Install frontend dependencies
+
+```bash
 npm install
 ```
 
-Copy environment file and generate key:
+### 4. Copy environment file and generate key
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-## Database Setup
+### 5. Database Setup
 
-Create database in MySQL:
+Create a new MySQL database:
 
 ```sql
-CREATE DATABASE task_manager;
+CREATE DATABASE project_tasks;
 ```
 
-Create database user:
+Create a new database user:
 
 ```sql
 CREATE USER 'task_user'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON task_manager.* TO 'task_user'@'localhost';
+GRANT ALL PRIVILEGES ON project_tasks.* TO 'task_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-Update `.env` file:
+Update `.env` file with your database credentials:
 
-```
+```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -87,9 +101,9 @@ Run migrations and seeders:
 php artisan migrate --seed
 ```
 
-## Run the Application
+### 6. Run the Application
 
-Run in **two terminals**.
+You need **two terminals**:
 
 Terminal 1:
 
@@ -103,17 +117,19 @@ Terminal 2:
 npm run dev
 ```
 
-Open:
+Visit the app at:
 
 ```
 http://127.0.0.1:8000
 ```
 
-## Run Tests
+### 7. Run Tests
 
 ```bash
 php artisan test
 ```
+
+---
 
 ## Tech Stack
 
